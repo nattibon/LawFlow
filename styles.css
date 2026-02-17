@@ -118,8 +118,10 @@ h1 {
 
 .article-content p {
     color: var(--text-primary);
-    font-size: 1.125rem;
+    font-size: 1.1rem;
     line-height: 2;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
 }
 
 /* Audio Controls */
