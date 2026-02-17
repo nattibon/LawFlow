@@ -706,20 +706,32 @@ addArticleForm.addEventListener('submit', (e) => {
     const category = document.getElementById('articleCategory').value;
     const content = document.getElementById('articleContent').value.trim();
 
-    // Add new article
-    articles[nextArticleId] = {
-        number: number,
-        category: category,
-        content: content
-    };
+    // Check if editing existing article
+    const editingId = addArticleForm.dataset.editingId;
 
-    nextArticleId++;
+    if (editingId) {
+        // Update existing article
+        articles[editingId] = {
+            number: number,
+            category: category,
+            content: content
+        };
+        delete addArticleForm.dataset.editingId;
+        alert('แก้ไขมาตราเรียบร้อยแล้ว!');
+    } else {
+        // Add new article
+        articles[nextArticleId] = {
+            number: number,
+            category: category,
+            content: content
+        };
+        nextArticleId++;
+        alert('เพิ่มมาตราเรียบร้อยแล้ว!');
+    }
+
     saveArticlesToStorage();
-    renderArticleCards();
+    renderArticleCards(currentFilter);
     closeModal();
-
-    // Show success message (optional)
-    alert('เพิ่มมาตราเรียบร้อยแล้ว!');
 });
 
 // Initialize
