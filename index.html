@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>LawFlow - ท่องจำกฎหมายด้วยเสียง</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="icon">⚖️</span>
+                <h1>LawFlow</h1>
+            </div>
+            <p class="tagline">ท่องจำกฎหมายด้วยเสียง</p>
+        </header>
+
+        <main>
+            <!-- Article Card -->
+            <div class="article-card">
+                <div class="article-header">
+                    <span class="article-number">มาตรา 420</span>
+                    <span class="category-badge">ประมวลกฎหมายอาญา</span>
+                </div>
+
+                <div class="article-content" id="lawText">
+                    <p>ผู้ใดโดยทุจริต แสดงความเท็จเป็นเอกสารซึ่งอาจก่อให้เกิดความเสียหายแก่ผู้อื่นหรือแก่สาธารณะ
+                        หรือแสดงเท็จเอกสารใช้เป็นพยานหลักฐานได้ ผู้นั้นกระทำความผิดฐานปลอมเอกสาร
+                        ต้องระวางโทษจำคุกไม่เกินสามปี หรือปรับไม่เกินหกพันบาท หรือทั้งจำทั้งปรับ</p>
+                </div>
+
+                <!-- Audio Controls -->
+                <div class="audio-controls">
+                    <button class="btn-primary" id="playBtn">
+                        <span class="icon">▶️</span>
+                        <span id="playBtnText">เล่นเสียง</span>
+                    </button>
+
+                    <button class="btn-secondary" id="pauseBtn">
+                        <span class="icon">⏸️</span>
+                        หยุดชั่วคราว
+                    </button>
+
+                    <button class="btn-secondary" id="stopBtn">
+                        <span class="icon">⏹️</span>
+                        หยุด
+                    </button>
+                </div>
+
+                <!-- Settings -->
+                <div class="settings">
+                    <div class="setting-item">
+                        <label for="rate">
+                            <span class="icon">⚡</span>
+                            ความเร็ว: <span id="rateValue">1.0x</span>
+                        </label>
+                        <input type="range" id="rate" min="0.5" max="2" step="0.1" value="0.8">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="pitch">
+                            <span class="icon">🎵</span>
+                            น้ำเสียง: <span id="pitchValue">1.0</span>
+                        </label>
+                        <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="voice">
+                            <span class="icon">🎤</span>
+                            เสียงพากย์
+                        </label>
+                        <select id="voice"></select>
+                    </div>
+
+                    <div class="setting-item repeat-mode">
+                        <label for="repeatMode">
+                            <input type="checkbox" id="repeatMode">
+                            <span class="icon">🔁</span>
+                            อ่านซ้ำ (Loop)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <p class="progress-text" id="progressText">พร้อมฟัง</p>
+            </div>
+
+            <!-- Add Article Button -->
+            <div class="add-article-section">
+                <button class="btn-add-article" id="addArticleBtn">
+                    <span class="icon">➕</span>
+                    เพิ่มมาตราใหม่
+                </button>
+            </div>
+
+            <!-- Example Articles -->
+            <div class="examples">
+                <h2>มาตราอื่นๆ</h2>
+
+                <!-- Category Filter Tabs -->
+                <div class="category-filters">
+                    <button class="filter-btn active" data-category="all">
+                        ทั้งหมด <span class="count" id="count-all">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="ประมวลกฎหมายอาญา">
+                        อาญา <span class="count" id="count-อาญา">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="แพ่งและพาณิชย์">
+                        แพ่ง <span class="count" id="count-แพ่ง">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="กฎหมายวิธีพิจารณาความอาญา">
+                        วิ.อาญา <span class="count" id="count-วิอาญา">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="กฎหมายวิธีพิจารณาความแพ่ง">
+                        วิ.แพ่ง <span class="count" id="count-วิแพ่ง">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="รัฐธรรมนูญ">
+                        รธน. <span class="count" id="count-รธน">0</span>
+                    </button>
+                    <button class="filter-btn" data-category="อื่นๆ">
+                        อื่นๆ <span class="count" id="count-อื่นๆ">0</span>
+                    </button>
+                    <button class="btn-add-category" id="addCategoryBtn" title="เพิ่มหมวดหมู่ใหม่">
+                        ➕
+                    </button>
+                </div>
+
+                <div class="example-grid">
+                    <div class="example-card" data-article="1">
+                        <span class="example-number">มาตรา 1</span>
+                        <p class="example-preview">กฎหมายนี้เรียกว่า ประมวลกฎหมายแพ่งและพาณิชย์</p>
+                        <span class="example-category">แพ่งและพาณิชย์</span>
+                    </div>
+
+                    <div class="example-card" data-article="2">
+                        <span class="example-number">มาตรา 276</span>
+                        <p class="example-preview">ผู้ใดฆ่าผู้อื่นต้องระวางโทษประหารชีวิต จำคุกตลอดชีวิต
+                            หรือจำคุกตั้งแต่สิบห้าปีถึงยี่สิบปี</p>
+                        <span class="example-category">ประมวลกฎหมายอาญา</span>
+                    </div>
+
+                    <div class="example-card" data-article="3">
+                        <span class="example-number">มาตรา 157</span>
+                        <p class="example-preview">บุคคลย่อมบรรลุนิติภาวะเมื่อมีอายุได้ยี่สิบปีบริบูรณ์</p>
+                        <span class="example-category">แพ่งและพาณิชย์</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>💡 <strong>เคล็ดลับ:</strong> ใช้ฟีเจอร์ Text-to-Speech เพื่อฟังซ้ำๆ ช่วยจำได้ดีขึ้น!</p>
+        </footer>
+    </div>
+
+    <!-- Add Article Modal -->
+    <div class="modal" id="addArticleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>เพิ่มมาตราใหม่</h2>
+                <button class="modal-close" id="closeModal">✕</button>
+            </div>
+            <form id="addArticleForm">
+                <div class="form-group">
+                    <label for="articleNumber">หมายเลขมาตรา *</label>
+                    <input type="text" id="articleNumber" placeholder="เช่น มาตรา 420" required>
+                </div>
+                <div class="form-group">
+                    <label for="articleCategory">หมวดหมู่ *</label>
+                    <select id="articleCategory" required>
+                        <option value="">-- เลือกหมวดหมู่ --</option>
+                        <option value="ประมวลกฎหมายอาญา">ประมวลกฎหมายอาญา</option>
+                        <option value="แพ่งและพาณิชย์">แพ่งและพาณิชย์</option>
+                        <option value="กฎหมายวิธีพิจารณาความอาญา">กฎหมายวิธีพิจารณาความอาญา</option>
+                        <option value="กฎหมายวิธีพิจารณาความแพ่ง">กฎหมายวิธีพิจารณาความแพ่ง</option>
+                        <option value="รัฐธรรมนูญ">รัฐธรรมนูญ</option>
+                        <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="articleContent">เนื้อหา *</label>
+                    <textarea id="articleContent" rows="5" placeholder="กรอกเนื้อหามาตรา..." required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelModal">ยกเลิก</button>
+                    <button type="submit" class="btn-primary">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal" id="addCategoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>เพิ่มหมวดหมู่ใหม่</h2>
+                <button class="modal-close" id="closeCategoryModal">✕</button>
+            </div>
+            <form id="addCategoryForm">
+                <div class="form-group">
+                    <label for="categoryName">ชื่อหมวดหมู่ *</label>
+                    <input type="text" id="categoryName" placeholder="เช่น กฎหมายธุรกิจ" required maxlength="50">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelCategoryModal">ยกเลิก</button>
+                    <button type="submit" class="btn-primary">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
