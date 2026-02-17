@@ -86,6 +86,14 @@
                             อ่านซ้ำ (Loop)
                         </label>
                     </div>
+
+                    <div class="setting-item repeat-mode">
+                        <label for="paragraphMode">
+                            <input type="checkbox" id="paragraphMode">
+                            <span class="icon">📖</span>
+                            โหมดย่อหน้า
+                        </label>
+                    </div>
                 </div>
 
                 <!-- Progress Bar -->
@@ -93,6 +101,13 @@
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
                 <p class="progress-text" id="progressText">พร้อมฟัง</p>
+
+                <!-- Paragraph Navigation (Hidden by default) -->
+                <div class="paragraph-controls" id="paragraphControls" style="display: none;">
+                    <button class="btn-paragraph" id="prevParagraph" title="ย่อหน้าก่อนหน้า">⏮️</button>
+                    <span class="paragraph-indicator" id="paragraphIndicator">1/1</span>
+                    <button class="btn-paragraph" id="nextParagraph" title="ย่อหน้าถัดไป">⏭️</button>
+                </div>
             </div>
 
             <!-- Add Article Button -->
