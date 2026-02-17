@@ -396,6 +396,7 @@ function renderArticleCards(filterCategory = 'all') {
 
         card.innerHTML = `
             <button class="btn-delete" data-article-id="${articleId}">🗑️</button>
+            <button class="btn-edit-article" data-article-id="${articleId}">✏️</button>
             <span class="example-number">${article.number}</span>
             <p class="example-preview">${article.content}</p>
             <span class="example-category">${article.category}</span>
@@ -630,6 +631,15 @@ function attachCardEventListeners() {
             deleteArticle(articleId);
         });
     });
+
+    // Edit button clicks
+    document.querySelectorAll('.btn-edit-article').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const articleId = btn.dataset.articleId;
+            editArticle(articleId);
+        });
+    });
 }
 
 // Delete article
@@ -637,8 +647,27 @@ function deleteArticle(articleId) {
     if (confirm(`ต้องการลบ "${articles[articleId].number}" ใช่หรือไม่?`)) {
         delete articles[articleId];
         saveArticlesToStorage();
-        renderArticleCards();
+        renderArticleCards(currentFilter);
     }
+}
+
+// Edit article
+function editArticle(articleId) {
+    const article = articles[articleId];
+
+    // Fill form with existing data
+    document.getElementById('articleNumber').value = article.number;
+    document.getElementById('articleCategory').value = article.category;
+    document.getElementById('articleContent').value = article.content;
+
+    // Store article ID for updating
+    document.getElementById('addArticleForm').dataset.editingId = articleId;
+
+    // Change modal title
+    document.querySelector('#addArticleModal .modal-header h2').textContent = 'แก้ไขมาตรา';
+
+    // Open modal
+    document.getElementById('addArticleModal').classList.add('active');
 }
 
 // Modal controls
