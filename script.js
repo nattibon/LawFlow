@@ -369,16 +369,9 @@ function renderArticleCards(filterCategory = 'all') {
     const exampleGrid = document.querySelector('.example-grid');
     exampleGrid.innerHTML = '';
 
-    // Count articles by category
-    const categoryCounts = {
-        'all': 0,
-        'ประมวลกฎหมายอาญา': 0,
-        'แพ่งและพาณิชย์': 0,
-        'กฎหมายวิธีพิจารณาความอาญา': 0,
-        'กฎหมายวิธีพิจารณาความแพ่ง': 0,
-        'รัฐธรรมนูญ': 0,
-        'อื่นๆ': 0
-    };
+    // Count articles by category — สร้าง dynamic จาก categories array
+    const categoryCounts = { 'all': 0 };
+    categories.forEach(cat => { categoryCounts[cat] = 0; });
 
     Object.keys(articles).forEach(articleId => {
         const article = articles[articleId];
@@ -593,15 +586,21 @@ function attachCardEventListeners() {
     // Card click to view article
     document.querySelectorAll('.example-card').forEach(card => {
         card.addEventListener('click', (e) => {
-            // Don't trigger if clicking delete button
-            if (e.target.classList.contains('btn-delete') || e.target.closest('.btn-delete')) {
-                return;
-            }
+            // Don't trigger if clicking delete or edit button
+            if (e.target.classList.contains('btn-delete') || e.target.closest('.btn-delete')) return;
+            if (e.target.classList.contains('btn-edit-article') || e.target.closest('.btn-edit-article')) return;
 
             const articleId = card.dataset.article;
             const article = articles[articleId];
 
             if (article) {
+                // ✅ ปิด paragraph mode ก่อนโหลดมาตราใหม่
+                const paragraphModeCheckbox = document.getElementById('paragraphMode');
+                if (paragraphModeCheckbox && paragraphModeCheckbox.checked) {
+                    paragraphModeCheckbox.checked = false;
+                    paragraphModeCheckbox.dispatchEvent(new Event('change'));
+                }
+
                 // Update the main article display
                 document.querySelector('.article-number').textContent = article.number;
                 document.querySelector('.category-badge').textContent = article.category;

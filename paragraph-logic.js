@@ -2,6 +2,7 @@
 let paragraphMode = false;
 let currentParagraphIndex = 0;
 let paragraphs = [];
+let originalLawText = ''; // ✅ เก็บข้อความต้นฉบับ
 
 // Get elements
 const paragraphModeCheckbox = document.getElementById('paragraphMode');
@@ -18,6 +19,9 @@ paragraphModeCheckbox.addEventListener('change', (e) => {
         // Show controls
         paragraphControls.style.display = 'flex';
 
+        // ✅ เก็บข้อความต้นฉบับก่อน split
+        originalLawText = lawText.innerHTML;
+
         // Split into paragraphs
         const text = lawText.textContent.trim();
         paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
@@ -29,17 +33,25 @@ paragraphModeCheckbox.addEventListener('change', (e) => {
         currentParagraphIndex = 0;
         showCurrentParagraph();
     } else {
-        // Hide controls and show full text
+        // Hide controls and restore original text
         paragraphControls.style.display = 'none';
-        // Restore original text (you'll need to store it)
+        paragraphs = [];
+
+        // ✅ Restore ข้อความต้นฉบับ
+        if (originalLawText) {
+            lawText.innerHTML = originalLawText;
+            originalLawText = '';
+        }
+
         updateParagraphButtons();
+        stopText(); // หยุดการอ่านเมื่อปิดโหมด
     }
 });
 
 // Show current paragraph
 function showCurrentParagraph() {
     if (paragraphs.length > 0) {
-        lawText.textContent = paragraphs[currentParagraphIndex];
+        lawText.innerHTML = `<p>${paragraphs[currentParagraphIndex]}</p>`;
         updateParagraphIndicator();
         updateParagraphButtons();
     }
@@ -52,8 +64,8 @@ function updateParagraphIndicator() {
 
 // Update button states
 function updateParagraphButtons() {
-    prevParagraphBtn.disabled = currentParagraphIndex === 0;
-    nextParagraphBtn.disabled = currentParagraphIndex === paragraphs.length - 1;
+    prevParagraphBtn.disabled = currentParagraphIndex === 0 || paragraphs.length === 0;
+    nextParagraphBtn.disabled = currentParagraphIndex === paragraphs.length - 1 || paragraphs.length === 0;
 }
 
 // Previous paragraph
